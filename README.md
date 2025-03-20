@@ -123,42 +123,44 @@
 
 ```mermaid
 flowchart TB
-    Infrastructure --> Domain
-    Domain --> UseCase
-    UseCase --> ApplicationService
-    ApplicationService --> View
+    Infrastructure --> |実装| Domain
+    Domain --> |依存| UseCase
+    UseCase --> |依存| ApplicationService
+    ApplicationService --> |制御| View
 
-    subgraph View["View (UI/表示)"]
+    subgraph View["View<br>(UI/表示)"]
         ViewLayer["表示レイヤー"]
     end
 
-    subgraph ApplicationService["ApplicationService (入力処理/制御)"]
+    subgraph ApplicationService["ApplicationService<br>(入力処理/制御)"]
         ServiceLayer["サービスレイヤー"]
     end
 
-    subgraph UseCase["UseCase (業務フロー)"]
+    subgraph UseCase["UseCase<br>(業務フロー)"]
         UseCaseLayer["ユースケースレイヤー"]
     end
 
-    subgraph Domain["Domain (ビジネスルール/エンティティ)"]
+    subgraph Domain["Domain<br>(ビジネスルール/エンティティ)"]
         DomainLayer["ドメインレイヤー"]
     end
 
-    subgraph Infrastructure["Infrastructure (外部連携/永続化)"]
-        InfrastructureLayer["インフラストラクチャレイヤー"]
+    subgraph Infrastructure["Infrastructure<br>(外部連携/永続化)"]
+        InfrastructureLayer["インフラストラクチャ<br>レイヤー"]
     end
 
-    classDef viewStyle fill:#E6F2FF,stroke:#1E90FF,stroke-width:2px;
-    classDef serviceStyle fill:#E6FFE6,stroke:#2E8B57,stroke-width:2px;
-    classDef useCaseStyle fill:#FFF5E6,stroke:#FF8C00,stroke-width:2px;
-    classDef domainStyle fill:#FFE6E6,stroke:#DC143C,stroke-width:2px;
-    classDef infrastructureStyle fill:#F0E6FF,stroke:#9932CC,stroke-width:2px;
+    classDef viewStyle fill:#E6F2FF,stroke:#1E90FF,stroke-width:2px,color:#00008B;
+    classDef serviceStyle fill:#E6FFE6,stroke:#2E8B57,stroke-width:2px,color:#006400;
+    classDef useCaseStyle fill:#FFF5E6,stroke:#FF8C00,stroke-width:2px,color:#8B4513;
+    classDef domainStyle fill:#FFE6E6,stroke:#DC143C,stroke-width:2px,color:#8B0000;
+    classDef infrastructureStyle fill:#F0E6FF,stroke:#9932CC,stroke-width:2px,color:#4B0082;
+    classDef edgeStyle stroke:#666666,stroke-width:1px;
 
     class View viewStyle;
     class ApplicationService serviceStyle;
     class UseCase useCaseStyle;
     class Domain domainStyle;
     class Infrastructure infrastructureStyle;
+    class Infrastructure,Domain,UseCase,ApplicationService,View edgeStyle;
 ```
 
 - 各層の間に明確なインターフェースを定義
