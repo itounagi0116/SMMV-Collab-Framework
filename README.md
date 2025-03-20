@@ -4,8 +4,8 @@
 ### 1. フレームワークの目的
 
 - 人間と生成AIが効率的に協働できる設計基盤を提供
-- 拡張性と柔軟性を備えた堅牢なシステム構築を実現
-- モジュール性を最適化し、AIによるコード補完や自動生成の精度を向上
+- 拡張性、柔軟性、及び**継続的改善**を重視した堅牢なシステム構築を実現
+- モジュール性を最適化し、AIによるコード補完や自動生成の精度を向上と**フィードバックループの確立**
 
 ### 2. フレームワーク構成 (SOLID + 構造主義 + モジュール思考 + DDD/MVC)
 
@@ -78,6 +78,10 @@
 - AIは、Infrastructureレイヤーに「Adapterパターン」で外部依存を適切に実装
 - テスト容易性と柔軟性の向上
 
+**明示的な契約**:
+- 各レイヤー間のインターフェースで明確な契約を定義する
+- 依存関係の透明性と安定性を向上させる
+
 ### 3. 生成AIとの効果的な協働ポイント
 
 **一貫した構造化**:
@@ -102,11 +106,15 @@
 - 人間とAIの双方が同じ構造原則に従うことでレビュー効率が向上
 - 構造的一貫性によりパターン検出と品質保証が容易に
 
+**対話的フィードバックの組み込み**:
+- 開発サイクルにAIとの対話型レビューを追加し、迅速な修正・改善を促進
+- 継続的改善のプロセスを確立し、AIとの協働効率を向上
+
 ### 4. AIプロンプト最適化例
 
 ```
-「Applicationレイヤーに、注文確認プロセスを処理する新しいUseCaseクラスをSOLID原則に準拠して実装してください。
-このUseCaseは OrderRepository と PaymentGateway に依存します。」
+「Applicationレイヤーに、注文確認プロセスを処理する新しいUseCaseクラスをSOLID原則および明示的な契約に準拠して実装してください。
+このUseCaseは OrderRepository と PaymentGateway に依存します。エラー処理とログ出力も含めてください。」
 ```
 
 ```
@@ -144,6 +152,7 @@
 - **AI協調**: フレームワーク構造はAIが理解しやすく、意図に沿ったコード生成を促進
 - **一貫性**: すべての設計判断は一貫した原則に基づいて行われる
 - **拡張性**: システムは変更に対して柔軟かつ堅牢である
+- **フィードバックループ**: 開発プロセスにおける定期的なフィードバックと改善を実施
 
 ### 7. 具体的なディレクトリ構成例
 
@@ -178,10 +187,12 @@ src/
 │   ├── logging/            # ロギング
 │   └── messaging/          # メッセージング
 │
-└── shared/                 # 共有モジュール
-    ├── utils/              # ユーティリティ
-    ├── constants/          # 定数
-    └── exceptions/         # 例外クラス
+├── shared/                 # 共有モジュール
+│   ├── utils/              # ユーティリティ
+│   ├── constants/          # 定数
+│   └── exceptions/         # 例外クラス
+│
+└── tests/                  # 自動テスト、検証スクリプト
 ```
 
 ### 8. クラス設計図例
@@ -210,7 +221,8 @@ src/
 [ DocumentRepositoryImpl ] [ OpenAIAnalysisService ] → インフラストラクチャ層
 ```
 
-このフレームワークは、人間と生成AIの効果的な協働を実現するための包括的な設計原則を提供しています。以下に、フレームワークの実装と実践に関するさらなる詳細を示します。
+このフレームワークは、人間と生成AIの効果的な協働を実現するための包括的な設計原則を提供しています。
+以下に、フレームワークの実装と実践に関するさらなる詳細を示します。
 
 ### 9. 実装パターンとベストプラクティス
 
@@ -247,13 +259,16 @@ src/
    - AIにエンティティと値オブジェクトの初期設計を生成させる
    - 人間によるレビューと調整を行う
 
-2. **インターフェース定義**:
+2. **インターフェース定義と明示的な契約の策定**:
    - ドメインモデルに基づき、リポジトリと各種サービスのインターフェースをAIに生成させる
    - コンテキスト境界と責任範囲を明確化
+   - レイヤー間の契約を明確に定義
 
 3. **ユースケース実装**:
    - ビジネスフローをAIに説明し、アプリケーション層のユースケースを生成
    - 依存性注入とフロー制御を整理
+   - AIによる初期コード生成
+   - 人間開発者によるレビューと改善の反復プロセスを実施
 
 4. **インフラストラクチャ層の実装**:
    - インターフェースに対する具体的な実装をAIに指示
@@ -262,6 +277,14 @@ src/
 5. **プレゼンテーション層の組み立て**:
    - UIコンポーネントとコントローラーの生成
    - エンドユーザー体験の最適化
+
+6. **自動テストとフィードバックループによる検証**:
+   - 各レイヤーに対応するテストの実施
+   - フィードバックに基づく改善
+
+7. **定期的なレビューと改善のサイクル**:
+   - 実装全体の一貫性と品質の確認
+   - 継続的な改善プロセスの実施
 
 #### コラボレーション効率化
 
@@ -273,7 +296,9 @@ src/
   - 名前: [コンポーネント名]
   - 依存関係: [依存するインターフェースやクラス]
   - 主要機能: [実装すべき主要機能]
-  - 特記事項: [特別な要件や制約]」
+  - 特記事項: [特別な要件や制約]
+  - エラー処理: [考慮すべき例外パターン]
+  - ログ出力: [ログ記録の要件]」
   ```
 
 - **段階的レビュープロセス**:
@@ -281,6 +306,7 @@ src/
   2. ビジネスロジックの正確性検証
   3. コード品質と適合性の評価
   4. テスト網羅性の確認
+  5. フィードバックに基づく改善点の特定
 
 ### 11. 実装例：ECサイト機能
 
@@ -320,22 +346,38 @@ public interface ProductRepository {
 // アプリケーション層 - UseCase
 public class SearchProductsUseCase {
     private final ProductRepository productRepository;
+    private final Logger logger;
     
-    public SearchProductsUseCase(ProductRepository productRepository) {
+    public SearchProductsUseCase(ProductRepository productRepository, Logger logger) {
         this.productRepository = productRepository;
+        this.logger = logger;
     }
     
     public List<ProductDTO> execute(ProductSearchCriteriaDTO criteriaDTO) {
-        // 入力変換
-        ProductSearchCriteria criteria = criteriaDTO.toDomainModel();
-        
-        // ドメインオペレーション実行
-        List<Product> products = productRepository.findByCriteria(criteria);
-        
-        // 出力変換
-        return products.stream()
-                .map(ProductDTO::fromDomainModel)
-                .collect(Collectors.toList());
+        try {
+            // 入力変換
+            logger.info("検索条件の変換を開始: {}", criteriaDTO);
+            ProductSearchCriteria criteria = criteriaDTO.toDomainModel();
+            
+            // ドメインオペレーション実行
+            logger.info("商品検索を実行: {}", criteria);
+            List<Product> products = productRepository.findByCriteria(criteria);
+            
+            // 出力変換
+            logger.info("検索結果: {} 件の商品が見つかりました", products.size());
+            return products.stream()
+                    .map(ProductDTO::fromDomainModel)
+                    .collect(Collectors.toList());
+        } catch (InvalidSearchCriteriaException e) {
+            logger.error("検索条件が不正: {}", e.getMessage());
+            throw new ApplicationException("検索条件の指定に問題があります", e);
+        } catch (RepositoryAccessException e) {
+            logger.error("リポジトリアクセスエラー: {}", e.getMessage());
+            throw new ApplicationException("商品データへのアクセス中にエラーが発生しました", e);
+        } catch (Exception e) {
+            logger.error("予期しないエラー: {}", e.getMessage(), e);
+            throw new ApplicationException("商品検索中に問題が発生しました", e);
+        }
     }
 }
 
@@ -360,14 +402,24 @@ public class ProductDTO {
 // インフラストラクチャ層 - Repository実装
 public class ProductRepositoryImpl implements ProductRepository {
     private final ProductDao productDao;
+    private final Logger logger;
     
-    public ProductRepositoryImpl(ProductDao productDao) {
+    public ProductRepositoryImpl(ProductDao productDao, Logger logger) {
         this.productDao = productDao;
+        this.logger = logger;
     }
     
     @Override
     public Optional<Product> findById(ProductId id) {
-        // DBアクセスと変換処理
+        try {
+            logger.debug("IDによる商品検索: {}", id.getValue());
+            // DBアクセスと変換処理
+            return productDao.findById(id.getValue())
+                   .map(this::toDomainEntity);
+        } catch (DataAccessException e) {
+            logger.error("データアクセスエラー: {}", e.getMessage());
+            throw new RepositoryAccessException("商品の取得に失敗しました", e);
+        }
     }
     
     // その他の実装
@@ -376,10 +428,28 @@ public class ProductRepositoryImpl implements ProductRepository {
 // インフラストラクチャ層 - AI分析サービス
 public class ProductRecommendationService implements RecommendationService {
     private final AIGateway aiGateway;
+    private final Logger logger;
     
     @Override
     public List<ProductId> getRecommendationsForUser(UserId userId) {
-        // AIサービス呼び出しとレスポンス変換
+        try {
+            logger.info("ユーザー {} の商品レコメンデーションを生成", userId.getValue());
+            // AIサービス呼び出しとレスポンス変換
+            return aiGateway.getRecommendations(userId.getValue())
+                   .stream()
+                   .map(ProductId::new)
+                   .collect(Collectors.toList());
+        } catch (AIServiceException e) {
+            logger.error("AIサービスエラー: {}", e.getMessage());
+            // フォールバック: 人気商品のリストを返す
+            return getDefaultRecommendations();
+        }
+    }
+    
+    private List<ProductId> getDefaultRecommendations() {
+        // デフォルトレコメンデーションの提供
+        logger.info("デフォルトレコメンデーションを使用");
+        // 実装...
     }
 }
 ```
@@ -390,13 +460,35 @@ public class ProductRecommendationService implements RecommendationService {
 public class ProductController {
     private final SearchProductsUseCase searchProductsUseCase;
     private final GetProductDetailsUseCase getProductDetailsUseCase;
+    private final Logger logger;
     
     // エンドポイント実装
     public List<ProductViewModel> searchProducts(SearchProductRequest request) {
-        // リクエスト検証
-        // UseCaseの実行
-        // レスポンス形成
+        try {
+            // リクエスト検証
+            validateSearchRequest(request);
+            
+            // DTOへの変換
+            ProductSearchCriteriaDTO criteriaDTO = convertToDTO(request);
+            
+            // UseCaseの実行
+            logger.info("商品検索リクエスト: {}", request);
+            List<ProductDTO> products = searchProductsUseCase.execute(criteriaDTO);
+            
+            // レスポンス形成
+            return products.stream()
+                   .map(this::toViewModel)
+                   .collect(Collectors.toList());
+        } catch (ValidationException e) {
+            logger.warn("入力検証エラー: {}", e.getMessage());
+            throw new BadRequestException(e.getMessage(), e);
+        } catch (ApplicationException e) {
+            logger.error("アプリケーションエラー: {}", e.getMessage());
+            throw new InternalServerException("商品検索処理でエラーが発生しました", e);
+        }
     }
+    
+    // 検証メソッドなど
 }
 ```
 
@@ -450,5 +542,7 @@ services/
   - 標準パターンライブラリ
   - 解決済み課題と学習点
   - AIプロンプト最適化事例集
+  - フィードバックと継続的改善のベストプラクティス
 
-このフレームワークを活用することで、人間開発者と生成AIが効率的に協働し、高品質で拡張性の高いソフトウェアを構築することができます。
+このフレームワークを活用することで、人間開発者と生成AIがより効率的に協働し、
+高品質で拡張性の高いソフトウェアを継続的に構築・改善できます。
