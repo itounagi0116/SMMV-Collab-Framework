@@ -121,16 +121,44 @@
 
 ### 5. アーキテクチャ全体像 (依存方向を明示)
 
-```
-[ View (UI/表示) ]
-    ↓ 依存
-[ ApplicationService (入力処理/制御) ]
-    ↓ 依存 (抽象インターフェースに対して)
-[ UseCase (業務フロー) ]
-    ↓ 依存 (抽象インターフェースに対して)
-[ Domain (ビジネスルール/エンティティ) ]
-    ↑ 実装
-[ Infrastructure (外部連携/永続化) ]
+```mermaid
+flowchart TB
+    Infrastructure --> Domain
+    Domain --> UseCase
+    UseCase --> ApplicationService
+    ApplicationService --> View
+
+    subgraph View["View (UI/表示)"]
+        ViewLayer["表示レイヤー"]
+    end
+
+    subgraph ApplicationService["ApplicationService (入力処理/制御)"]
+        ServiceLayer["サービスレイヤー"]
+    end
+
+    subgraph UseCase["UseCase (業務フロー)"]
+        UseCaseLayer["ユースケースレイヤー"]
+    end
+
+    subgraph Domain["Domain (ビジネスルール/エンティティ)"]
+        DomainLayer["ドメインレイヤー"]
+    end
+
+    subgraph Infrastructure["Infrastructure (外部連携/永続化)"]
+        InfrastructureLayer["インフラストラクチャレイヤー"]
+    end
+
+    classDef viewStyle fill:#E6F2FF,stroke:#1E90FF,stroke-width:2px;
+    classDef serviceStyle fill:#E6FFE6,stroke:#2E8B57,stroke-width:2px;
+    classDef useCaseStyle fill:#FFF5E6,stroke:#FF8C00,stroke-width:2px;
+    classDef domainStyle fill:#FFE6E6,stroke:#DC143C,stroke-width:2px;
+    classDef infrastructureStyle fill:#F0E6FF,stroke:#9932CC,stroke-width:2px;
+
+    class View viewStyle;
+    class ApplicationService serviceStyle;
+    class UseCase useCaseStyle;
+    class Domain domainStyle;
+    class Infrastructure infrastructureStyle;
 ```
 
 - 各層の間に明確なインターフェースを定義
